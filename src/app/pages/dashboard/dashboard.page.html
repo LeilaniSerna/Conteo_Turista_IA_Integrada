@@ -1,0 +1,122 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="dark-toolbar">
+    <div class="header-container">
+      <div class="header-logo">
+        <strong class="brand-title">GeoTourist</strong>
+        <span class="brand-subtitle">ANALYTICS DASHBOARD</span>
+      </div>
+      <div class="header-actions">
+        <ion-button fill="clear" color="light" (click)="openNotifications()">
+          <ion-icon name="notifications-outline"></ion-icon>
+        </ion-button>
+        <div class="user-avatar">{{ userInitials() }}</div>
+        <ion-menu-button color="light"></ion-menu-button>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="dark-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="container">
+    <div class="main-title">
+      <h1>Estado de la Red Turística</h1>
+      <p>Análisis visual de afluencia por sector.</p>
+    </div>
+
+    <div class="time-segments">
+      <button [class.active]="timeFilter() === 'Hoy'" (click)="setFilter('Hoy')">Hoy</button>
+      <button [class.active]="timeFilter() === 'Semana'" (click)="setFilter('Semana')">Semana</button>
+      <button [class.active]="timeFilter() === 'Mes'" (click)="setFilter('Mes')">Mes</button>
+    </div>
+
+    <div class="card-white chart-card">
+      <div class="chart-header">
+        <h2>Distribución de Flujo</h2>
+        <ion-icon name="pie-chart-outline"></ion-icon>
+      </div>
+
+      @if (isLoading() || !chartOptions.series || chartOptions.series.length === 0) {
+        <div class="chart-skeleton" style="padding: 20px 0;">
+          <ion-skeleton-text [animated]="true" style="width: 200px; height: 200px; border-radius: 50%; margin: 0 auto;"></ion-skeleton-text>
+        </div>
+      } @else {
+        <div class="chart-container">
+          <apx-chart
+            [series]="chartOptions.series!"
+            [labels]="chartOptions.labels!"
+            [chart]="chartOptions.chart!"
+            [plotOptions]="chartOptions.plotOptions!"
+            [colors]="chartOptions.colors!"
+            [dataLabels]="chartOptions.dataLabels!"
+            [legend]="chartOptions.legend!"
+            [stroke]="chartOptions.stroke!"
+          ></apx-chart>
+        </div>
+
+        <div class="custom-legend">
+          @for (point of locations(); track point.id; let i = $index) {
+            <div class="legend-item">
+              <div class="legend-label">
+                <span class="dot" [style.background]="chartOptions.colors![i % chartOptions.colors!.length]"></span>
+                <span>{{ point.nombre }}</span>
+              </div>
+              <div class="legend-value">{{ point.porcentajeDistribucion }}%</div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="card-white capacity-card">
+      @if (isLoading()) {
+        @for (i of [1,2,3]; track $index) {
+          <div class="capacity-item">
+            <ion-skeleton-text [animated]="true" style="width: 50%; height: 20px; margin-bottom: 8px;"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 100%; height: 8px; border-radius: 10px;"></ion-skeleton-text>
+          </div>
+        }
+      } @else {
+        @for (point of locations(); track point.id) {
+          <div class="capacity-item">
+            <div class="cap-header">
+              <span>{{ point.nombre }}</span>
+              <small [class.over-capacity]="point.porcentajeOcupacion > 90">
+                {{ point.porcentajeOcupacion }}% OCUPACIÓN
+              </small>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" 
+                   [style.width.%]="point.porcentajeOcupacion"
+                   [class.warning]="point.porcentajeOcupacion > 70"
+                   [class.danger]="point.porcentajeOcupacion > 90">
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <p style="text-align: center; color: #64748b;">No hay puntos registrados.</p>
+        }
+      }
+    </div>
+
+    <div class="visitor-grid">
+      @for (point of locations(); track point.id) {
+        <div class="card-white visitor-card">
+          <div class="card-info">
+            <h3>{{ point.nombre }}</h3>
+          </div>
+          <div class="card-data">
+            <small>VISITANTES</small>
+            <div class="data-row">
+              <strong>{{ point.totalVisitantes }}</strong>
+              <div class="trend positive">+8%</div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</ion-content>

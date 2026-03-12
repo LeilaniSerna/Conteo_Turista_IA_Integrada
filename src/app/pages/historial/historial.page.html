@@ -1,0 +1,92 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button color="dark"></ion-menu-button>
+    </ion-buttons>
+    <div class="header-logo">
+      <ion-icon name="globe-outline"></ion-icon>
+      <div class="logo-text">
+        <strong>Historial</strong>
+        
+      </div>
+    </div>
+    <ion-buttons slot="end">
+      <ion-icon name="notifications-outline" class="notif-icon"></ion-icon>
+      <div class="user-avatar">{{ userInitials() }}</div>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="container">
+    
+    <div class="page-header">
+      <div class="title-block">
+        <h1>Archivo de datos</h1>
+      </div>
+      <div class="action-buttons">
+        <button class="btn-outline" (click)="exportGlobalCSV()">
+          <ion-icon name="download-outline"></ion-icon> Excel Global
+        </button>
+        <button class="btn-solid">
+          <ion-icon name="document-text-outline"></ion-icon>Reporte
+        </button>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <ion-icon name="search-outline"></ion-icon>
+      <input type="text" placeholder="Buscar por punto de control" [(ngModel)]="searchQuery" />
+    </div>
+
+    <div class="data-table">
+      
+      <div class="table-head">
+        <div class="col col-punto">PUNTO DE CONTROL</div>
+        <div class="col col-fecha">FECHA Y HORA</div>
+        <div class="col col-afluencia">AFLUENCIA</div>
+        <div class="col col-accion">ACCION</div>
+      </div>
+
+      <div class="table-body">
+        @if (isLoading()) {
+          @for (i of [1,2,3,4]; track $index) {
+            <div class="table-row skeleton-row">
+              <ion-skeleton-text [animated]="true" style="width: 100%; height: 40px; border-radius: 8px;"></ion-skeleton-text>
+            </div>
+          }
+        } @else {
+          @for (record of records(); track record.id) {
+            <div class="table-row">
+              <div class="col col-punto">
+                <strong>{{ record.punto }}</strong>
+                <span>{{ record.ubicacion | uppercase }}</span>
+              </div>
+              <div class="col col-fecha">
+                <strong>{{ record.fecha }}</strong>
+                <span>{{ record.hora }} HRS</span>
+              </div>
+              <div class="col col-afluencia">
+                <div class="badge-number">{{ record.afluencia }}</div>
+              </div>
+              <div class="col col-accion">
+                <button class="btn-download" (click)="exportRow(record)">
+                  <ion-icon name="download-outline"></ion-icon>
+                </button>
+              </div>
+            </div>
+          } @empty {
+            <div class="empty-state">
+              <p>no hay registros en el historial</p>
+            </div>
+          }
+        }
+      </div>
+
+    </div>
+  </div>
+</ion-content>

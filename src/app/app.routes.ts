@@ -10,4 +10,20 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./pages/dashboard/dashboard.page').then( m => m.DashboardPage)
+  },
+  {
+    path: 'camara',
+    loadComponent: () => import('./pages/camara/camara.page').then( m => m.CamaraPage)
+  },
+  {
+    path: 'historial',
+    loadComponent: () => import('./pages/historial/historial.page').then( m => m.HistorialPage)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
+  },
 ];

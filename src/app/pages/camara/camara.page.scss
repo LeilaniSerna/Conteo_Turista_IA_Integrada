@@ -1,0 +1,145 @@
+// Paleta GeoTourist
+$emerald: #006b44;
+$light-emerald: #10b981;
+$dark: #0f172a;
+$gray: #64748b;
+$bg-light: #ffffff;
+$camera-bg: #050914; // El negro profundo de tu captura
+$neon-green: #34d399;
+
+/* --- Cabecera (Mismo estilo que el dashboard) --- */
+.header-logo {
+  display: flex; align-items: center; gap: 8px;
+  ion-icon { font-size: 24px; color: $emerald; }
+  .logo-text {
+    display: flex; flex-direction: column; line-height: 1;
+    strong { font-size: 18px; color: $dark; font-family: serif;}
+    span { font-size: 9px; color: $emerald; font-weight: 700; letter-spacing: 1px; }
+  }
+}
+.notif-icon { font-size: 22px; color: $gray; margin-right: 15px; }
+.user-avatar {
+  width: 32px; height: 32px; background: $emerald; color: white;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 12px; margin-right: 15px;
+}
+
+/* --- Contenido --- */
+.container { padding: 20px; }
+
+.page-header {
+  display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px;
+  flex-wrap: wrap; gap: 15px;
+
+  .title-block {
+    h1 { font-family: serif; font-size: 28px; font-weight: 800; color: #1e293b; margin: 0; }
+    p { color: $gray; margin: 5px 0 0; font-size: 14px; }
+  }
+
+  .select-wrapper {
+    position: relative;
+    .custom-select {
+      appearance: none; background: white; border: 1px solid #e2e8f0;
+      color: $emerald; font-weight: 700; padding: 10px 35px 10px 15px;
+      border-radius: 12px; font-size: 14px; outline: none;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    }
+    // Chevron personalizado para el select
+    &::after {
+      content: '▼'; font-size: 10px; color: $emerald;
+      position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+      pointer-events: none;
+    }
+  }
+}
+
+/* --- Marco de la Cámara --- */
+.camera-outer-frame {
+  width: 100%; height: 60vh; min-height: 450px;
+  border-radius: 40px; border: 4px solid #e6f7f0; // El borde verde clarito
+  background: white; padding: 4px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.camera-skeleton {
+  width: 100%; height: 100%; border-radius: 34px; margin: 0;
+}
+
+.camera-view {
+  width: 100%; height: 100%;
+  background: $camera-bg;
+  border-radius: 34px; // Para que encaje dentro del marco
+  position: relative;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 25px;
+  overflow: hidden;
+
+  /* Overlays Superiores */
+  .overlay-top {
+    display: flex; justify-content: space-between; align-items: flex-start; z-index: 2;
+    
+    .rec-badge {
+      background: $emerald; color: white; padding: 8px 16px;
+      border-radius: 20px; font-weight: 800; font-size: 11px; letter-spacing: 1px;
+      display: flex; align-items: center; gap: 8px;
+      
+      .red-dot {
+        width: 8px; height: 8px; background: #ef4444; border-radius: 50%;
+        animation: blink 1.5s infinite;
+      }
+    }
+
+    .precision-stats {
+      text-align: right;
+      small { display: block; color: $gray; font-size: 10px; font-weight: 800; letter-spacing: 1px; }
+      strong { color: $neon-green; font-size: 26px; font-weight: 900; }
+    }
+  }
+
+  /* Retícula de Enfoque (El centro) */
+  .reticle-container {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 200px; height: 200px; z-index: 1;
+
+    .bracket {
+      position: absolute; width: 30px; height: 30px; border-color: $neon-green; border-style: solid; border-width: 0;
+      &.top-left { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; }
+      &.top-right { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; }
+      &.bottom-left { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; }
+      &.bottom-right { bottom: 0; right: 0; border-bottom-width: 2px; border-right-width: 2px; }
+    }
+
+    .center-circle {
+      position: absolute; top: 10%; left: 10%; right: 10%; bottom: 10%;
+      border: 1px solid rgba($neon-green, 0.2); border-radius: 50%;
+    }
+  }
+
+  /* Overlays Inferiores */
+  .overlay-bottom {
+    display: flex; gap: 15px; z-index: 2;
+
+    .stat-box {
+      flex: 1; padding: 20px; border-radius: 20px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      
+      small { font-size: 10px; font-weight: 800; letter-spacing: 1px; margin-bottom: 5px; }
+      strong { font-size: 28px; font-weight: 900; }
+
+      &.black-box {
+        background: #000000; color: white; border: 1px solid #1e293b;
+        small { color: #94a3b8; }
+      }
+
+      &.green-box {
+        background: #0a7b53; color: white;
+      }
+    }
+  }
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}

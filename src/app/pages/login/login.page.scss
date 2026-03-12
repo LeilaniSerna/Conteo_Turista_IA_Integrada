@@ -1,0 +1,129 @@
+// Colores exactos del diseño profesional
+$dark-navy: #202d3d;
+$light-blue-bg: #dce6f2;
+$input-bg: #f5f8fc;
+$input-border: #e0e6ed;
+$text-gray: #5d707f;
+
+.login-background {
+  --background: #{$light-blue-bg};
+}
+
+
+.top-banner {
+      height: 70px;
+      background: $dark-navy;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      h2 {
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: 2.5px; // Este espaciado le da el toque profesional
+        margin: 0;
+        text-transform: uppercase;
+      }
+    }
+
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 20px;
+
+  .form-card {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 35px; // Bordes muy redondeados
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+
+    .top-banner {
+      height: 60px;
+      background: $dark-navy;
+    }
+
+    .form-content {
+      padding: 45px 35px 20px 35px;
+    }
+
+    .input-group {
+      margin-bottom: 25px;
+
+      .input-label {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: $text-gray;
+        letter-spacing: 1.5px;
+        margin-bottom: 12px;
+        padding-left: 5px;
+      }
+    }
+
+    .custom-input-wrapper {
+      background: $input-bg;
+      border: 1.5px solid $input-border;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      padding: 8px 18px;
+      height: 60px;
+
+      ion-icon {
+        color: #7a8ba3;
+        font-size: 1.4rem;
+        margin-right: 12px;
+      }
+
+      ion-input {
+        --color: #{$dark-navy};
+        --placeholder-color: #abb5be;
+        font-weight: 500;
+        font-size: 1rem;
+      }
+
+      .eye-icon {
+        margin-right: 0;
+        margin-left: 10px;
+        font-size: 1.2rem;
+        opacity: 0.6;
+      }
+    }
+
+    .login-btn {
+      --background: #{$dark-navy};
+      --color: white;
+      --border-radius: 18px;
+      height: 65px;
+      margin-top: 20px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-transform: none; // Para que no sea todo mayúsculas
+      
+      ion-icon {
+        margin-left: 8px;
+        font-size: 1rem;
+      }
+    }
+
+    .footer-security {
+      border-top: 1px solid #f0f3f7;
+      padding: 25px;
+      text-align: center;
+      margin-top: 15px;
+
+      p {
+        font-size: 0.65rem;
+        font-weight: 800;
+        color: #9eb1c2;
+        letter-spacing: 1.5px;
+        margin: 0;
+      }
+    }
+  }
+}

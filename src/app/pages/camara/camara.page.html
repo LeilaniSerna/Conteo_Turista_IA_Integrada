@@ -1,0 +1,83 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button color="dark"></ion-menu-button>
+    </ion-buttons>
+    <div class="header-logo">
+      <ion-icon name="globe-outline"></ion-icon>
+      <div class="logo-text">
+        <strong>GeoTourist</strong>
+  
+      </div>
+    </div>
+    <ion-buttons slot="end">
+      <ion-icon name="notifications-outline" class="notif-icon"></ion-icon>
+      <div class="user-avatar">{{ userInitials() }}</div>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="container">
+    
+    <div class="page-header">
+      <div class="title-block">
+        <h1>Monitoreo en tiempo real</h1>
+      </div>
+      
+      <div class="select-wrapper">
+        <select class="custom-select" (change)="onLocationChange($event)" [disabled]="isLoading()">
+          @for (loc of locations(); track loc.id) {
+            <option [value]="loc.id">{{ loc.nombre }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="camera-outer-frame">
+      @if (!isCameraReady()) {
+        <ion-skeleton-text [animated]="true" class="camera-skeleton"></ion-skeleton-text>
+      } @else {
+        <div class="camera-view">
+          
+          <div class="overlay-top">
+            <div class="rec-badge">
+              <span class="red-dot"></span>
+              REC: {{ selectedLocation()?.nombre | uppercase }}
+            </div>
+            
+            <div class="precision-stats">
+              <small>PRECISIÓN IA</small>
+              <strong>{{ iaAccuracy() }}%</strong>
+            </div>
+          </div>
+
+          <div class="reticle-container">
+            <div class="bracket top-left"></div>
+            <div class="bracket top-right"></div>
+            <div class="bracket bottom-left"></div>
+            <div class="bracket bottom-right"></div>
+            <div class="center-circle"></div>
+          </div>
+
+          <div class="overlay-bottom">
+            <div class="stat-box black-box">
+              <small>ENTRADAS</small>
+              <strong>{{ entradasActuales() | number }}</strong>
+            </div>
+            <div class="stat-box green-box">
+              <small>CARGA</small>
+              <strong>{{ cargaActual() }}%</strong>
+            </div>
+          </div>
+
+        </div>
+      }
+    </div>
+
+  </div>
+</ion-content>
