@@ -8,7 +8,6 @@ import { environment } from '../../environments/environment';
 export class SupabaseService {
   private supabase: SupabaseClient;
 
-  
   get supabaseClient() {
     return this.supabase;
   }
@@ -26,6 +25,26 @@ export class SupabaseService {
 
     this.supabase = createClient(url, key);
     console.log('inicio correctamente');
+  }
+
+  // Obtener historial completo con unión de tablas
+  async getHistorialCompleto() {
+    try {
+      const { data, error } = await this.supabase
+        .from('registros_conteo')
+        .select(`
+          id, 
+          entradas, 
+          salidas, 
+          total_neto, 
+          creado_at,
+          puntos_turisticos ( nombre, descripcion )
+        `)
+        .order('creado_at', { ascending: false });
+      return { data, error };
+    } catch (err) {
+      return { data: null, error: err };
+    }
   }
 
   // Obtener puntos turísticos

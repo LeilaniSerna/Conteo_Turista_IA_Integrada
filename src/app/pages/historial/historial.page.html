@@ -7,7 +7,7 @@
       <ion-icon name="globe-outline"></ion-icon>
       <div class="logo-text">
         <strong>Historial</strong>
-        
+        <span>GEOTOURIST</span>
       </div>
     </div>
     <ion-buttons slot="end">
@@ -23,28 +23,30 @@
   </ion-refresher>
 
   <div class="container">
-    
     <div class="page-header">
       <div class="title-block">
         <h1>Archivo de datos</h1>
+        
       </div>
       <div class="action-buttons">
         <button class="btn-outline" (click)="exportGlobalCSV()">
           <ion-icon name="download-outline"></ion-icon> Excel Global
         </button>
         <button class="btn-solid">
-          <ion-icon name="document-text-outline"></ion-icon>Reporte
+          <ion-icon name="document-text-outline"></ion-icon> Reporte
         </button>
       </div>
     </div>
 
     <div class="search-bar">
       <ion-icon name="search-outline"></ion-icon>
-      <input type="text" placeholder="Buscar por punto de control" [(ngModel)]="searchQuery" />
+      <input type="text" 
+             placeholder="Buscar por punto de control" 
+             [ngModel]="searchQuery()" 
+             (ngModelChange)="searchQuery.set($event)" />
     </div>
 
     <div class="data-table">
-      
       <div class="table-head">
         <div class="col col-punto">PUNTO DE CONTROL</div>
         <div class="col col-fecha">FECHA Y HORA</div>
@@ -54,13 +56,13 @@
 
       <div class="table-body">
         @if (isLoading()) {
-          @for (i of [1,2,3,4]; track $index) {
+          @for (i of [1,2,3,4,5]; track $index) {
             <div class="table-row skeleton-row">
               <ion-skeleton-text [animated]="true" style="width: 100%; height: 40px; border-radius: 8px;"></ion-skeleton-text>
             </div>
           }
         } @else {
-          @for (record of records(); track record.id) {
+          @for (record of filteredRecords(); track record.id) {
             <div class="table-row">
               <div class="col col-punto">
                 <strong>{{ record.punto }}</strong>
@@ -81,12 +83,11 @@
             </div>
           } @empty {
             <div class="empty-state">
-              <p>no hay registros en el historial</p>
+              <p>No se encontraron registros en el historial</p>
             </div>
           }
         }
       </div>
-
     </div>
   </div>
 </ion-content>

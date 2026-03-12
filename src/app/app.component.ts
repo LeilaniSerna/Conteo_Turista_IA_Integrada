@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { addIcons } from 'ionicons';
 import { gridOutline, cameraOutline, listOutline, logOutOutline } from 'ionicons/icons';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
-import { SupabaseService } from './services/supabase'; // Ajusta la ruta si es necesario
+import { SupabaseService } from './services/supabase';
 
 @Component({
   selector: 'app-root',

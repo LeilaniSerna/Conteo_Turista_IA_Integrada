@@ -15,13 +15,13 @@ import { Haptics, ImpactStyle } from '@capacitor/haptics';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class LoginPage {
-  // Inyecciones de dependencias
+  
   private supabaseSvc = inject(SupabaseService);
   private loadingCtrl = inject(LoadingController);
   private toastCtrl = inject(ToastController);
   private navCtrl = inject(NavController);
 
-  // Signals para manejar el estado (Modern Angular)
+
   isLogin = signal(true);
   isLoading = signal(false);
   email = signal('');
@@ -38,13 +38,13 @@ export class LoginPage {
     });
   }
 
-  // Alternar entre Login y Registro con feedback vibratorio
+
   async toggleMode() {
     await Haptics.impact({ style: ImpactStyle.Light });
     this.isLogin.update(val => !val);
   }
 
-  // Lógica principal de Autenticación
+
   async handleAuth() {
     if (!this.email() || !this.password()) {
       this.showToast('Por favor, completa todos los campos', 'warning');
@@ -61,7 +61,6 @@ export class LoginPage {
     await loading.present();
 
     try {
-      // Nota: Asumimos que agregaremos estos métodos a tu SupabaseService
       const { data, error } = this.isLogin() 
         ? await this.supabaseSvc.signIn(this.email(), this.password())
         : await this.supabaseSvc.signUp(this.email(), this.password());
@@ -69,7 +68,7 @@ export class LoginPage {
       if (error) throw error;
 
       this.showToast(this.isLogin() ? '¡Bienvenido!' : 'Cuenta creada con éxito', 'success');
-      this.navCtrl.navigateRoot('/dashboard'); // Navegación tras éxito
+      this.navCtrl.navigateRoot('/dashboard'); 
 
     } catch (error: any) {
       await Haptics.notification({ type: 'error' as any });
@@ -80,18 +79,18 @@ export class LoginPage {
     }
   }
 
-  // Simulación de Biometría (Huella/Rostro)
+  
   async biometricLogin() {
     await Haptics.impact({ style: ImpactStyle.Medium });
     
-    // Aquí se integraría con el plugin de Fingerprint AIO o Capgo
+    
     console.log('Iniciando sensor biométrico...');
     
-    // Simulación de éxito por ahora
+    // Simulación de exito por ahora
     this.showToast('Identidad verificada correctamente', 'success');
   }
 
-  // Feedback para el Refresher
+  // Feedback
   async handleRefresh(event: any) {
     await Haptics.impact({ style: ImpactStyle.Light });
     setTimeout(() => {
@@ -99,7 +98,7 @@ export class LoginPage {
     }, 1500);
   }
 
-  // Utilería para mensajes
+  
   async showToast(message: string, color: 'success' | 'danger' | 'warning') {
     const toast = await this.toastCtrl.create({
       message,
