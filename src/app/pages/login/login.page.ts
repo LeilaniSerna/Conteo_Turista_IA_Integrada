@@ -3,7 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, LoadingController, ToastController, NavController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { analyticsOutline, fingerPrintOutline, mailOutline, lockClosedOutline, personAddOutline, logInOutline } from 'ionicons/icons';
+import { 
+  analyticsOutline, 
+  fingerPrintOutline, 
+  mailOutline, 
+  lockClosedOutline, 
+  personAddOutline, 
+  logInOutline,
+  personOutline,
+  eyeOutline,
+  chevronForwardOutline
+} from 'ionicons/icons';
 import { SupabaseService } from '../../services/supabase';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
@@ -34,7 +44,10 @@ export class LoginPage {
       mailOutline, 
       lockClosedOutline, 
       personAddOutline, 
-      logInOutline 
+      logInOutline,
+      personOutline,
+      eyeOutline,
+      chevronForwardOutline
     });
   }
 

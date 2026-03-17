@@ -15,19 +15,28 @@ export class SupabaseService {
   constructor() {
     const env = environment as any;
     
-    let url = env.supabaseUrl;
-    let key = env.supabaseKey;
+    const url = env.supabaseUrl;
+    const key = env.supabaseKey;
 
-    if (!url) {
-      url = 'https://mfpuvlmqvnesxwxgjpcu.supabase.co';
-      key = 'sb_publishable__hIPYDA3IJViV6nU2n90Rg_V-8xVvek';
+    if (!url || !key) {
+      console.error('⚠️ Faltan las credenciales de Supabase en environment.ts');
     }
 
-    this.supabase = createClient(url, key);
-    console.log('inicio correctamente');
+    
+    this.supabase = createClient(url, key, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false,
+        storage: window.localStorage,
+        storageKey: 'geotourist-auth-token'
+      }
+    });
+    
+    console.log('Supabase inicializado correctamente');
   }
 
-  // Obtener historial completo con unión de tablas
+  
   async getHistorialCompleto() {
     try {
       const { data, error } = await this.supabase
@@ -96,7 +105,7 @@ export class SupabaseService {
     }
   }
 
-  // iniciar sesion
+  // iniciar sesión
   async signIn(email: string, pass: string) {
     const { data, error } = await this.supabase.auth.signInWithPassword({
       email: email,
