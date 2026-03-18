@@ -6,7 +6,7 @@
         <span class="brand-subtitle">ANALYTICS DASHBOARD</span>
       </div>
       <div class="header-actions">
-        <ion-button fill="clear" color="light" (click)="openNotifications()">
+        <ion-button fill="clear" color="light">
           <ion-icon name="notifications-outline"></ion-icon>
         </ion-button>
         <div class="user-avatar">{{ userInitials() }}</div>
@@ -40,8 +40,8 @@
       </div>
 
       @if (isLoading() || !chartOptions.series || chartOptions.series.length === 0) {
-        <div class="chart-skeleton" style="padding: 20px 0;">
-          <ion-skeleton-text [animated]="true" style="width: 200px; height: 200px; border-radius: 50%; margin: 0 auto;"></ion-skeleton-text>
+        <div class="chart-skeleton">
+          <ion-skeleton-text [animated]="true"></ion-skeleton-text>
         </div>
       } @else {
         <div class="chart-container">
@@ -75,7 +75,7 @@
       @if (isLoading()) {
         @for (i of [1,2,3]; track $index) {
           <div class="capacity-item">
-            <ion-skeleton-text [animated]="true" style="width: 50%; height: 20px; margin-bottom: 8px;"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 150px; height: 16px; margin-bottom: 8px;"></ion-skeleton-text>
             <ion-skeleton-text [animated]="true" style="width: 100%; height: 8px; border-radius: 10px;"></ion-skeleton-text>
           </div>
         }
@@ -97,7 +97,7 @@
             </div>
           </div>
         } @empty {
-          <p style="text-align: center; color: #64748b;">No hay puntos registrados.</p>
+          <p>No hay puntos registrados.</p>
         }
       }
     </div>
@@ -112,7 +112,9 @@
             <small>VISITANTES</small>
             <div class="data-row">
               <strong>{{ point.totalVisitantes }}</strong>
-              <div class="trend positive">+8%</div>
+              <div [class]="point.tendenciaPositiva ? 'trend positive' : 'trend negative'">
+                {{ point.tendenciaPositiva ? '+' : '-' }}{{ point.tendenciaValor }}%
+              </div>
             </div>
           </div>
         </div>

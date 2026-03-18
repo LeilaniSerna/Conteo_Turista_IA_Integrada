@@ -19,7 +19,7 @@ export class SupabaseService {
     const key = env.supabaseKey;
 
     if (!url || !key) {
-      console.error('⚠️ Faltan las credenciales de Supabase en environment.ts');
+      console.error('Faltan las credenciales de Supabase en environment.ts');
     }
 
     
@@ -128,4 +128,23 @@ export class SupabaseService {
     const { error } = await this.supabase.auth.signOut();
     return { error };
   }
+
+  // Obtener registros en un rango de fechas
+  async getRegistrosPorRango(inicio: string, fin: string) {
+    try {
+      const { data, error } = await this.supabase
+        .from('registros_conteo')
+        .select('punto_id, entradas, salidas, total_neto, creado_at')
+        .gte('creado_at', inicio)
+        .lte('creado_at', fin);
+      return { data, error };
+    } catch (err) {
+      return { data: null, error: err };
+    }
+  }
+
+
+
 }
+
+

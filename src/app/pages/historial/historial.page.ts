@@ -5,7 +5,7 @@ import { IonicModule, ToastController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { 
   globeOutline, notificationsOutline, downloadOutline, 
-  documentTextOutline, searchOutline, chevronForwardOutline
+  documentTextOutline, searchOutline 
 } from 'ionicons/icons';
 import { SupabaseService } from '../../services/supabase';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
@@ -22,11 +22,10 @@ export class HistorialPage implements OnInit {
   private toastCtrl = inject(ToastController);
 
   isLoading = signal(true);
-  searchQuery = signal(''); // Signal para el buscador
-  allRecords = signal<any[]>([]); // Lista completa de la BD
-  userInitials = signal('ER');
+  searchQuery = signal('');
+  allRecords = signal<any[]>([]);
+  userInitials = signal('AD');
 
-  // Lógica de búsqueda automática
   filteredRecords = computed(() => {
     const query = this.searchQuery().toLowerCase().trim();
     if (!query) return this.allRecords();
@@ -39,7 +38,7 @@ export class HistorialPage implements OnInit {
   constructor() {
     addIcons({ 
       globeOutline, notificationsOutline, downloadOutline, 
-      documentTextOutline, searchOutline, chevronForwardOutline
+      documentTextOutline, searchOutline 
     });
   }
 
@@ -49,25 +48,28 @@ export class HistorialPage implements OnInit {
   }
 
   async loadUserProfile() {
-    const { data: { user } } = await this.supabaseSvc.supabaseClient.auth.getUser();
-    if (user?.email) this.userInitials.set(user.email.substring(0, 2).toUpperCase());
+    try {
+      const { data: { user } } = await this.supabaseSvc.supabaseClient.auth.getUser();
+      if (user?.email) this.userInitials.set(user.email.substring(0, 2).toUpperCase());
+    } catch (e) {
+      this.userInitials.set('AD');
+    }
   }
 
   async loadHistory() {
     this.isLoading.set(true);
-    
     const { data, error } = await this.supabaseSvc.getHistorialCompleto();
 
     if (!error && data) {
-      const formattedData = data.map((item: any) => ({
+      const formatted = data.map((item: any) => ({
         id: item.id,
         punto: item.puntos_turisticos?.nombre || 'Punto Desconocido',
         ubicacion: item.puntos_turisticos?.descripcion || 'Calvillo, Ags.',
-        fecha: new Date(item.creado_at).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }),
+        fecha: new Date(item.creado_at).toLocaleDateString('es-MX'),
         hora: new Date(item.creado_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        afluencia: item.entradas + item.salidas 
+        afluencia: (item.entradas || 0) + (item.salidas || 0)
       }));
-      this.allRecords.set(formattedData);
+      this.allRecords.set(formatted);
     }
     this.isLoading.set(false);
   }
@@ -78,28 +80,26 @@ export class HistorialPage implements OnInit {
     event.target.complete();
   }
 
-  async exportGlobalCSV() {
-    await Haptics.impact({ style: ImpactStyle.Heavy });
-    if (this.allRecords().length === 0) {
-      this.showToast('No hay datos para exportar', 'warning');
-      return;
-    }
-    const headers = ['Punto', 'Ubicacion', 'Fecha', 'Hora', 'Afluencia'];
-    const rows = this.allRecords().map(r => [r.punto, `"${r.ubicacion}"`, r.fecha, r.hora, r.afluencia].join(','));
-    this.downloadCSV(headers.join(',') + '\n' + rows.join('\n'), 'Historial_Completo.csv');
-    this.showToast('Reporte generado correctamente', 'success');
-  }
-
   async exportRow(record: any) {
     await Haptics.impact({ style: ImpactStyle.Light });
-    const content = `Punto,${record.punto}\nFecha,${record.fecha}\nHora,${record.hora}\nAfluencia,${record.afluencia}`;
+    const content = `Punto,${record.punto}\nUbicacion,${record.ubicacion}\nFecha,${record.fecha}\nHora,${record.hora}\nAfluencia,${record.afluencia}`;
     this.downloadCSV(content, `Registro_${record.punto}.csv`);
-    this.showToast('Descargando registro...', 'primary');
+    
+    const toast = await this.toastCtrl.create({
+      message: 'Descargando registro...',
+      duration: 2000,
+      color: 'success',
+      position: 'bottom'
+    });
+    await toast.present();
   }
 
-  private async showToast(message: string, color: string) {
-    const toast = await this.toastCtrl.create({ message, duration: 2000, color, position: 'bottom' });
-    await toast.present();
+  async exportGlobalCSV() {
+    await Haptics.impact({ style: ImpactStyle.Heavy });
+    if (this.allRecords().length === 0) return;
+    const headers = ['Punto,Ubicacion,Fecha,Hora,Afluencia'];
+    const rows = this.allRecords().map(r => `${r.punto},"${r.ubicacion}",${r.fecha},${r.hora},${r.afluencia}`);
+    this.downloadCSV(headers.join('\n') + '\n' + rows.join('\n'), 'Historial_GeoTourist.csv');
   }
 
   private downloadCSV(content: string, fileName: string) {
