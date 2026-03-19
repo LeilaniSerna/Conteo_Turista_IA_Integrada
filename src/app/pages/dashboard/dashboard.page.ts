@@ -1,29 +1,20 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, NavController } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { notificationsOutline, menuOutline, pieChartOutline } from 'ionicons/icons';
 import { SupabaseService } from '../../services/supabase';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { HeaderComponent } from '../../components/header/header.component';
 import { 
-  NgApexchartsModule, 
-  ApexChart, 
-  ApexNonAxisChartSeries, 
-  ApexPlotOptions, 
-  ApexDataLabels, 
-  ApexLegend, 
-  ApexStroke 
+  NgApexchartsModule, ApexChart, ApexNonAxisChartSeries, 
+  ApexPlotOptions, ApexDataLabels, ApexLegend, ApexStroke 
 } from 'ng-apexcharts';
 
 export type ChartOptions = {
-  series: ApexNonAxisChartSeries;
-  chart: ApexChart;
-  labels: any;
-  colors: string[];
-  plotOptions: ApexPlotOptions;
-  dataLabels: ApexDataLabels;
-  legend: ApexLegend;
-  stroke: ApexStroke;
+  series: ApexNonAxisChartSeries; chart: ApexChart; labels: any;
+  colors: string[]; plotOptions: ApexPlotOptions; dataLabels: ApexDataLabels;
+  legend: ApexLegend; stroke: ApexStroke;
 };
 
 @Component({
@@ -31,28 +22,21 @@ export type ChartOptions = {
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, NgApexchartsModule]
+  imports: [IonicModule, CommonModule, NgApexchartsModule, HeaderComponent]
 })
 export class DashboardPage implements OnInit {
   private supabaseSvc = inject(SupabaseService);
 
   isLoading = signal(true);
   locations = signal<any[]>([]);
-  userInitials = signal('AD');
   timeFilter = signal('Hoy');
-
   public chartOptions: Partial<ChartOptions>;
 
   constructor() {
     addIcons({ notificationsOutline, menuOutline, pieChartOutline });
 
     this.chartOptions = {
-      chart: { 
-        type: 'donut' as const,
-        height: 260, 
-        fontFamily: 'inherit', 
-        animations: { enabled: true } 
-      },
+      chart: { type: 'donut' as const, height: 260, fontFamily: 'inherit', animations: { enabled: true } },
       colors: ['#006b44', '#10b981', '#34d399', '#6ee7b7', '#a7f3d0'],
       plotOptions: {
         pie: {
@@ -61,57 +45,40 @@ export class DashboardPage implements OnInit {
             labels: {
               show: true,
               name: { show: true, fontSize: '12px', color: '#64748b', offsetY: -5 },
-              value: { 
-                show: true, fontSize: '24px', fontWeight: 800, color: '#0f172a', offsetY: 5,
-                formatter: (val) => val.toString() 
-              },
+              value: { show: true, fontSize: '24px', fontWeight: 800, color: '#0f172a', offsetY: 5, formatter: (val) => val.toString() },
               total: {
-                show: true, 
-                showAlways: true, 
-                label: 'TOTAL', 
-                color: '#64748b', 
-                fontSize: '10px', 
-                fontWeight: 700,
+                show: true, showAlways: true, label: 'TOTAL', color: '#64748b', fontSize: '10px', fontWeight: 700,
                 formatter: (w) => {
                   const total = w.globals.seriesTotals.reduce((a: any, b: any) => a + b, 0);
-                  const result = total > 1000 ? (total / 1000).toFixed(1) + 'k' : total;
-                  return result.toString(); 
+                  return total >= 1000 ? (total / 1000).toFixed(1) + 'k' : total.toString(); 
                 }
               }
             }
           }
         }
       },
-      dataLabels: { enabled: false },
-      legend: { show: false },
-      stroke: { show: false, width: 0 }
+      dataLabels: { enabled: false }, legend: { show: false }, stroke: { show: false, width: 0 }
     };
   }
 
   async ngOnInit() {
-    await this.loadUserProfile();
     await this.loadDashboardData();
-  }
-
-  async loadUserProfile() {
-    try {
-      const { data: { user } } = await (this.supabaseSvc as any).supabase.auth.getUser();
-      if (user?.email) this.userInitials.set(user.email.substring(0, 2).toUpperCase());
-    } catch (e) {
-      this.userInitials.set('AD');
-    }
   }
 
   async loadDashboardData() {
     this.isLoading.set(true);
     const { data: puntos, error: errorPuntos } = await this.supabaseSvc.getPuntosTuristicos();
     
-    if (!errorPuntos && puntos) {
-      const { actualInicio, actualFin, pasadoInicio, pasadoFin } = this.getRangeDates();
+    if (errorPuntos) {
+      this.isLoading.set(false);
+      return;
+    }
 
+    if (puntos) {
+      const { actualInicio, actualFin, pasadoInicio, pasadoFin } = this.getRangeDates();
       const [resActual, resPasado] = await Promise.all([
-        (this.supabaseSvc as any).getRegistrosPorRango(actualInicio, actualFin),
-        (this.supabaseSvc as any).getRegistrosPorRango(pasadoInicio, pasadoFin)
+        this.supabaseSvc.getRegistrosPorRango(actualInicio, actualFin),
+        this.supabaseSvc.getRegistrosPorRango(pasadoInicio, pasadoFin)
       ]);
 
       const puntosCalculados = puntos.map(punto => {
@@ -122,26 +89,18 @@ export class DashboardPage implements OnInit {
         const totalPasado = regPasado.reduce((s: number, r: any) => s + (r.entradas || 0), 0);
 
         let tendencia = 0;
-        if (totalPasado > 0) {
-          tendencia = Math.round(((totalActual - totalPasado) / totalPasado) * 100);
-        } else if (totalActual > 0) {
-          tendencia = 100;
-        }
+        if (totalPasado > 0) tendencia = Math.round(((totalActual - totalPasado) / totalPasado) * 100);
+        else if (totalActual > 0) tendencia = 100;
 
         const ultimoRegistro = regActual.length > 0 ? regActual[regActual.length - 1] : null;
         const aforoActual = ultimoRegistro ? ultimoRegistro.total_neto : 0;
         
         let ocupacion = 0;
-        if (punto.capacidad_maxima > 0) {
-           ocupacion = Math.min(Math.round((aforoActual / punto.capacidad_maxima) * 100), 100);
-        }
+        if (punto.capacidad_maxima > 0) ocupacion = Math.min(Math.round((aforoActual / punto.capacidad_maxima) * 100), 100);
 
         return { 
-          ...punto, 
-          totalVisitantes: totalActual, 
-          porcentajeOcupacion: ocupacion,
-          tendenciaValor: Math.abs(tendencia),
-          tendenciaPositiva: tendencia >= 0
+          ...punto, totalVisitantes: totalActual, porcentajeOcupacion: ocupacion,
+          tendenciaValor: Math.abs(tendencia), tendenciaPositiva: tendencia >= 0
         };
       });
 

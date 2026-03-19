@@ -1,32 +1,41 @@
 <ion-app>
   <ion-menu contentId="main-content" type="overlay">
-    <ion-header class="ion-no-border">
-      <ion-toolbar color="dark">
-        <ion-title>Menú Principal</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content color="dark">
-      <ion-list lines="none" style="background: transparent;">
+    <ion-content class="dark-menu-content">
+      
+      <div class="menu-header">
+        <h2>Menú Principal</h2>
+      </div>
+
+      <ion-list lines="none" class="menu-list">
         <ion-menu-toggle auto-hide="false">
+          
           <ion-item button (click)="navigate('/dashboard')" detail="false">
             <ion-icon slot="start" name="grid-outline"></ion-icon>
             <ion-label>Dashboard</ion-label>
           </ion-item>
+          
           <ion-item button (click)="navigate('/camara')" detail="false">
             <ion-icon slot="start" name="camera-outline"></ion-icon>
             <ion-label>Cámara IA</ion-label>
           </ion-item>
+          
           <ion-item button (click)="navigate('/historial')" detail="false">
             <ion-icon slot="start" name="list-outline"></ion-icon>
             <ion-label>Historial</ion-label>
           </ion-item>
-          
-          <ion-item button (click)="logout()" class="ion-margin-top" detail="false">
-            <ion-icon slot="start" name="log-out-outline" color="danger"></ion-icon>
-            <ion-label color="danger">Cerrar Sesión</ion-label>
-          </ion-item>
+
         </ion-menu-toggle>
       </ion-list>
+
+      <div class="menu-footer">
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button (click)="logout()" detail="false" class="logout-item">
+            <ion-icon slot="start" name="log-out-outline"></ion-icon>
+            <ion-label>Cerrar Sesión</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </div>
+
     </ion-content>
   </ion-menu>
 

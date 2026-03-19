@@ -6,13 +6,14 @@ import { addIcons } from 'ionicons';
 import { notificationsOutline, globeOutline } from 'ionicons/icons';
 import { SupabaseService } from '../../services/supabase';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { HeaderComponent } from '../../components/header/header.component';
 
 @Component({
   selector: 'app-camara',
   templateUrl: './camara.page.html',
   styleUrls: ['./camara.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent]
 })
 export class CamaraPage implements OnInit {
   private supabaseSvc = inject(SupabaseService);
@@ -21,7 +22,6 @@ export class CamaraPage implements OnInit {
   isCameraReady = signal(false);
   locations = signal<any[]>([]);
   selectedLocation = signal<any>(null);
-  userInitials = signal('AD');
   iaAccuracy = signal('99.8');
   entradasActuales = signal(0);
   cargaActual = signal(0);
@@ -31,13 +31,7 @@ export class CamaraPage implements OnInit {
   }
 
   async ngOnInit() {
-    await this.loadUserProfile();
     await this.loadLocations();
-  }
-
-  async loadUserProfile() {
-    const { data: { user } } = await this.supabaseSvc.supabaseClient.auth.getUser();
-    if (user?.email) this.userInitials.set(user.email.substring(0, 2).toUpperCase());
   }
 
   async loadLocations() {

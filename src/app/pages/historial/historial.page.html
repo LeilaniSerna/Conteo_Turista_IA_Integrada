@@ -1,21 +1,4 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button color="dark"></ion-menu-button>
-    </ion-buttons>
-    <div class="header-logo">
-      <ion-icon name="globe-outline"></ion-icon>
-      <div class="logo-text">
-        <strong>Historial</strong>
-        <span>GEOTOURIST</span>
-      </div>
-    </div>
-    <ion-buttons slot="end">
-      <ion-icon name="notifications-outline" class="notif-icon"></ion-icon>
-      <div class="user-avatar">{{ userInitials() }}</div>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-header title="Archivo Federal"></app-header>
 
 <ion-content color="light">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
@@ -26,37 +9,68 @@
     <div class="page-header">
       <div class="title-block">
         <h1>Archivo de datos</h1>
-        
+        <p>Historial de descarga de datos.</p>
       </div>
       <div class="action-buttons">
-        <button class="btn-outline" (click)="exportGlobalCSV()">
-          <ion-icon name="download-outline"></ion-icon> Excel Global
-        </button>
-        <button class="btn-solid">
-          <ion-icon name="document-text-outline"></ion-icon> Reporte
+        <button class="btn-solid" (click)="exportGlobalCSV()" [disabled]="isLoading() || allRecords().length === 0">
+          <ion-icon name="download-outline"></ion-icon> {{ exportBtnText() }}
         </button>
       </div>
     </div>
 
-    <div class="search-bar">
-      <ion-icon name="search-outline"></ion-icon>
-      <input type="text" 
-             placeholder="Buscar por punto de control" 
-             [ngModel]="searchQuery()" 
-             (ngModelChange)="searchQuery.set($event)" />
+    <div class="filter-system">
+      <div class="tabs-container">
+        <button [class.active]="periodoActual() === 'Hoy'" (click)="setPeriod('Hoy')">Hoy</button>
+        <button [class.active]="periodoActual() === 'Semana'" (click)="setPeriod('Semana')">7 Días</button>
+        <button [class.active]="periodoActual() === 'Mes'" (click)="setPeriod('Mes')">Mes</button>
+        <button [class.active]="periodoActual() === 'Año'" (click)="setPeriod('Año')">Año</button>
+      </div>
+
+      @if (periodoActual() === 'Mes' || periodoActual() === 'Año') {
+        <div class="selectors-container">
+          @if (periodoActual() === 'Mes') {
+            <select class="custom-select" [(ngModel)]="mesActual" (change)="onFilterChange()">
+              @for (mes of meses; track mes.id) {
+                <option [value]="mes.id">{{ mes.nombre }}</option>
+              }
+            </select>
+          }
+          <select class="custom-select" [(ngModel)]="anioActual" (change)="onFilterChange()">
+            @for (anio of anios; track anio) {
+              <option [value]="anio">{{ anio }}</option>
+            }
+          </select>
+        </div>
+      }
+    </div>
+
+    <div class="insights-bar">
+      <ion-icon name="bar-chart-outline"></ion-icon>
+      <div class="insight-text">
+        <span>Afluencia en este periodo:</span>
+        <strong>{{ totalAfluencia() | number }} personas</strong>
+      </div>
     </div>
 
     <div class="data-table">
+      <div class="search-bar">
+        <ion-icon name="search-outline"></ion-icon>
+        <input type="text" 
+               placeholder="Filtrar punto de control..." 
+               [ngModel]="searchQuery()" 
+               (ngModelChange)="searchQuery.set($event)" />
+      </div>
+
       <div class="table-head">
         <div class="col col-punto">PUNTO DE CONTROL</div>
-        <div class="col col-fecha">FECHA Y HORA</div>
-        <div class="col col-afluencia">AFLUENCIA</div>
-        <div class="col col-accion">ACCION</div>
+        <div class="col col-fecha">PERIODO</div>
+        <div class="col col-afluencia">AFLUENCIA TOTAL</div>
+        <div class="col col-accion">ACCIÓN</div>
       </div>
 
       <div class="table-body">
         @if (isLoading()) {
-          @for (i of [1,2,3,4,5]; track $index) {
+          @for (i of [1,2,3]; track $index) {
             <div class="table-row skeleton-row">
               <ion-skeleton-text [animated]="true" style="width: 100%; height: 40px; border-radius: 8px;"></ion-skeleton-text>
             </div>
@@ -66,14 +80,12 @@
             <div class="table-row">
               <div class="col col-punto">
                 <strong>{{ record.punto }}</strong>
-                <span>{{ record.ubicacion | uppercase }}</span>
               </div>
               <div class="col col-fecha">
-                <strong>{{ record.fecha }}</strong>
-                <span>{{ record.hora }} HRS</span>
+                <strong>{{ periodoTexto() }}</strong>
               </div>
               <div class="col col-afluencia">
-                <div class="badge-number">{{ record.afluencia }}</div>
+                <div class="badge-number">{{ record.afluencia | number }}</div>
               </div>
               <div class="col col-accion">
                 <button class="btn-download" (click)="exportRow(record)">
@@ -83,7 +95,8 @@
             </div>
           } @empty {
             <div class="empty-state">
-              <p>No se encontraron registros en el historial</p>
+              <ion-icon name="calendar-outline" style="font-size: 40px; color: #cbd5e1; margin-bottom: 10px;"></ion-icon>
+              <p>No se registraron movimientos en este periodo.</p>
             </div>
           }
         }

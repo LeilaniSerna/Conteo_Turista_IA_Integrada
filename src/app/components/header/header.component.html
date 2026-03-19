@@ -1,0 +1,26 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="custom-toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button color="dark"></ion-menu-button>
+    </ion-buttons>
+
+    <div class="header-logo">
+      <ion-icon name="globe-outline"></ion-icon>
+      <div class="logo-text">
+        <strong>{{ title }}</strong>
+        <span>GEOTOURIST</span>
+      </div>
+    </div>
+
+    <ion-buttons slot="end">
+      <ion-icon name="notifications-outline" class="notif-icon"></ion-icon>
+      <div class="user-avatar" (click)="goToPerfil()">
+        @if (avatarUrl()) {
+          <img [src]="avatarUrl()" alt="Perfil" />
+        } @else {
+          {{ userInitials() }}
+        }
+      </div>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>

@@ -1,20 +1,4 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar class="dark-toolbar">
-    <div class="header-container">
-      <div class="header-logo">
-        <strong class="brand-title">GeoTourist</strong>
-        <span class="brand-subtitle">ANALYTICS DASHBOARD</span>
-      </div>
-      <div class="header-actions">
-        <ion-button fill="clear" color="light">
-          <ion-icon name="notifications-outline"></ion-icon>
-        </ion-button>
-        <div class="user-avatar">{{ userInitials() }}</div>
-        <ion-menu-button color="light"></ion-menu-button>
-      </div>
-    </div>
-  </ion-toolbar>
-</ion-header>
+<app-header title="SmartVisio"></app-header>
 
 <ion-content class="dark-content">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
@@ -24,7 +8,7 @@
   <div class="container">
     <div class="main-title">
       <h1>Estado de la Red Turística</h1>
-      <p>Análisis visual de afluencia por sector.</p>
+      <p>Análisis de afluencia real en tiempo real.</p>
     </div>
 
     <div class="time-segments">
@@ -39,9 +23,9 @@
         <ion-icon name="pie-chart-outline"></ion-icon>
       </div>
 
-      @if (isLoading() || !chartOptions.series || chartOptions.series.length === 0) {
-        <div class="chart-skeleton">
-          <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      @if (isLoading()) {
+        <div class="chart-skeleton ion-text-center">
+          <ion-skeleton-text [animated]="true" style="width: 200px; height: 200px; border-radius: 50%; margin: 0 auto;"></ion-skeleton-text>
         </div>
       } @else {
         <div class="chart-container">
@@ -97,7 +81,7 @@
             </div>
           </div>
         } @empty {
-          <p>No hay puntos registrados.</p>
+          <p class="ion-text-center" style="color: #64748b;">No hay datos de ocupación disponibles.</p>
         }
       }
     </div>

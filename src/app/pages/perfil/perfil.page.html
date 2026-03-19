@@ -1,0 +1,88 @@
+<app-header title="Mi Perfil"></app-header>
+
+<ion-content color="light">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="container">
+    @if (isLoading()) {
+      <div class="skeleton-wrapper">
+        <ion-skeleton-text [animated]="true" class="avatar-skeleton"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 100%; height: 50px; margin-top: 20px; border-radius: 12px;"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 100%; height: 50px; margin-top: 15px; border-radius: 12px;"></ion-skeleton-text>
+      </div>
+    } @else {
+      
+      <div class="avatar-section">
+        <div class="avatar-wrapper">
+          @if (avatarUrl()) {
+            <img [src]="avatarUrl()" alt="Avatar de usuario" class="profile-img" />
+          } @else {
+            <div class="avatar-placeholder">
+              <ion-icon name="person-outline"></ion-icon>
+            </div>
+          }
+          
+          <div class="edit-badge" (click)="fileInput.click()">
+            <ion-icon name="camera-outline"></ion-icon>
+          </div>
+          <input type="file" #fileInput accept="image/*" (change)="onFileSelected($event)" style="display: none;" />
+        </div>
+        
+        <h2>{{ nombreCompleto() || 'Usuario GeoTourist' }}</h2>
+        <span class="role-badge">{{ rolUsuario() | uppercase }}</span>
+      </div>
+
+      <div class="settings-card">
+        <div class="card-header">
+          <ion-icon name="person-outline"></ion-icon>
+          <h3>Información Personal</h3>
+        </div>
+        
+        <div class="form-group">
+          <label>Nombre Completo</label>
+          <input type="text" 
+                 [ngModel]="nombreCompleto()" 
+                 (ngModelChange)="nombreCompleto.set($event)" 
+                 placeholder="Ingresa tu nombre..." />
+        </div>
+
+        <div class="form-group disabled-group">
+          <label>Nivel de Acceso</label>
+          <input type="text" [value]="rolUsuario()" readonly />
+          <small>El rol solo puede ser modificado por un Administrador.</small>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <div class="card-header">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+          <h3>Seguridad y Acceso</h3>
+        </div>
+        
+        <div class="form-group">
+          <label>Nueva Contraseña</label>
+          <input type="password" 
+                 [ngModel]="newPassword()" 
+                 (ngModelChange)="newPassword.set($event)" 
+                 placeholder="Mínimo 6 caracteres..." />
+        </div>
+
+        <div class="form-group">
+          <label>Confirmar Contraseña</label>
+          <input type="password" 
+                 [ngModel]="confirmPassword()" 
+                 (ngModelChange)="confirmPassword.set($event)" 
+                 placeholder="Repite la contraseña..." />
+        </div>
+      </div>
+
+      <button class="btn-save" (click)="saveChanges()" [disabled]="isSaving()">
+        <ion-icon name="save-outline"></ion-icon>
+        {{ isSaving() ? 'Guardando...' : 'Guardar Cambios' }}
+      </button>
+
+    }
+  </div>
+</ion-content>

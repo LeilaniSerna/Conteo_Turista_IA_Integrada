@@ -1,21 +1,4 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button ></ion-menu-button>
-    </ion-buttons>
-    <div class="header-logo">
-      <ion-icon name="globe-outline"></ion-icon>
-      <div class="logo-text">
-        <strong>GeoTourist</strong>
-  
-      </div>
-    </div>
-    <ion-buttons slot="end">
-      <ion-icon name="notifications-outline" class="notif-icon"></ion-icon>
-      <div class="user-avatar">{{ userInitials() }}</div>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-header title="Unidad de Captura"></app-header>
 
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
@@ -23,7 +6,6 @@
   </ion-refresher>
 
   <div class="container">
-    
     <div class="page-header">
       <div class="title-block">
         <h1>Monitoreo en tiempo real</h1>
@@ -78,6 +60,5 @@
         </div>
       }
     </div>
-
   </div>
 </ion-content>

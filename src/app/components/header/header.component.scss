@@ -1,0 +1,34 @@
+$emerald: #006b44;
+$dark: #0f172a;
+$gray: #64748b;
+
+.custom-toolbar {
+  --background: #ffffff;
+  padding: 5px 10px;
+}
+
+.header-logo {
+  display: flex; align-items: center; gap: 8px;
+  ion-icon { font-size: 24px; color: $emerald; }
+  .logo-text {
+    display: flex; flex-direction: column; line-height: 1;
+    strong { font-size: 18px; color: $dark; font-family: serif; }
+    span { font-size: 9px; color: $emerald; font-weight: 700; letter-spacing: 1px; }
+  }
+}
+
+.notif-icon { 
+  font-size: 22px; color: $gray; margin-right: 15px; 
+}
+
+.user-avatar {
+  width: 35px; height: 35px; background: $emerald; color: white;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; margin-right: 15px; cursor: pointer;
+  overflow: hidden; border: 2px solid #e2e8f0;
+  transition: transform 0.2s;
+  
+  &:active { transform: scale(0.9); }
+  
+  img { width: 100%; height: 100%; object-fit: cover; }
+}

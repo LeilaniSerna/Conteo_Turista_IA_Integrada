@@ -30,38 +30,65 @@ $bg-light: #f8fafc;
   }
 
   .action-buttons {
-    display: flex; gap: 10px;
     button {
       display: flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 12px; font-weight: 700; font-size: 13px; transition: 0.2s;
+      background: $emerald; border: none; color: white;
+      &:active { opacity: 0.8; transform: scale(0.98); }
+      &:disabled { background: #cbd5e1; opacity: 0.7; pointer-events: none; }
       ion-icon { font-size: 18px; }
-      
-      &.btn-outline {
-        background: transparent; border: 1px solid #e2e8f0; color: $dark;
-        &:active { background: #f1f5f9; }
-      }
-      &.btn-solid {
-        background: $emerald; border: none; color: white;
-        &:active { opacity: 0.8; transform: scale(0.98); }
-      }
     }
   }
 }
 
-.search-bar {
-  display: flex; align-items: center; background: white; padding: 0 20px;
-  border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 30px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+/* Sistema de Filtros */
+.filter-system {
+  display: flex; flex-wrap: wrap; gap: 15px; align-items: center; margin-bottom: 20px;
   
-  ion-icon { color: #94a3b8; font-size: 20px; margin-right: 10px; }
-  input {
-    flex: 1; border: none; outline: none; padding: 18px 0; font-size: 14px; color: $dark;
-    &::placeholder { color: #94a3b8; }
+  .tabs-container {
+    display: flex; background: white; padding: 5px; border-radius: 12px; border: 1px solid #e2e8f0;
+    button {
+      padding: 10px 18px; border-radius: 8px; border: none; background: transparent;
+      color: $gray; font-weight: 700; font-size: 13px; transition: 0.2s;
+      &.active { background: $emerald; color: white; }
+    }
+  }
+
+  .selectors-container {
+    display: flex; gap: 10px;
+    .custom-select {
+      appearance: none; background: white; border: 1px solid #e2e8f0;
+      color: $dark; font-weight: 700; padding: 10px 35px 10px 15px;
+      border-radius: 10px; font-size: 13px; outline: none; cursor: pointer;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23006b44%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+      background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 10px auto;
+    }
   }
 }
 
+/* Insights Bar */
+.insights-bar {
+  background: #ecfdf5; border: 1px solid #d1fae5; padding: 15px 20px; border-radius: 16px;
+  display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
+  ion-icon { font-size: 24px; color: $emerald; }
+  .insight-text {
+    span { color: #065f46; font-size: 13px; font-weight: 600; display: block; margin-bottom: 2px;}
+    strong { color: $emerald; font-size: 18px; font-weight: 800; }
+  }
+}
+
+/* Tabla Principal */
 .data-table {
-  background: white; border-radius: 24px; padding: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  background: white; border-radius: 24px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+
+  .search-bar {
+    display: flex; align-items: center; background: #f8fafc; padding: 0 15px;
+    border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px;
+    ion-icon { color: #94a3b8; font-size: 20px; margin-right: 10px; }
+    input {
+      flex: 1; border: none; outline: none; padding: 15px 0; font-size: 14px; color: $dark; background: transparent;
+      &::placeholder { color: #94a3b8; }
+    }
+  }
 
   .table-head {
     display: flex; padding-bottom: 15px; border-bottom: 1px solid #f1f5f9; margin-bottom: 10px;
@@ -73,29 +100,21 @@ $bg-light: #f8fafc;
     &:last-child { border-bottom: none; }
     
     .col-punto {
-      display: flex; flex-direction: column;
-      strong { font-size: 16px; color: $dark; font-family: serif; font-weight: 800; margin-bottom: 4px;}
-      span { font-size: 11px; color: $emerald; font-weight: 700; letter-spacing: 1px; }
+      strong { font-size: 16px; color: $dark; font-family: serif; font-weight: 800; }
     }
 
     .col-fecha {
-      display: flex; flex-direction: column;
-      strong { font-size: 14px; color: $dark; font-weight: 700; margin-bottom: 4px; }
-      span { font-size: 11px; color: $gray; font-weight: 600; }
+      strong { font-size: 13px; color: $gray; font-weight: 700; }
     }
 
     .col-afluencia {
-      .badge-number {
-        background: #f1f5f9; color: $dark; font-weight: 800; font-size: 16px;
-        padding: 8px 20px; border-radius: 20px; display: inline-block;
-      }
+      .badge-number { background: #f1f5f9; color: $dark; font-weight: 800; font-size: 16px; padding: 8px 20px; border-radius: 20px; display: inline-block; }
     }
 
     .col-accion {
       .btn-download {
-        background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
-        width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;
-        color: #94a3b8; transition: 0.2s;
+        background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; width: 45px; height: 45px;
+        display: flex; align-items: center; justify-content: center; color: #94a3b8; transition: 0.2s;
         &:active { background: $emerald; color: white; border-color: $emerald; transform: scale(0.95); }
         ion-icon { font-size: 20px; }
       }

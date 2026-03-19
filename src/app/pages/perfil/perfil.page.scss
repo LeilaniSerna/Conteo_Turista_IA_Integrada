@@ -1,0 +1,215 @@
+$emerald: #006b44;
+$dark: #0f172a;
+$gray: #64748b;
+$bg-light: #f8fafc;
+
+.container {
+  padding: 20px;
+  padding-bottom: 40px;
+}
+
+/* --- SECCIÓN DEL AVATAR --- */
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+  margin-top: 10px;
+
+  .avatar-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 15px;
+
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid white;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    .avatar-placeholder {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+      border: 4px solid white;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    .edit-badge {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 36px;
+      height: 36px;
+      background: $emerald;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      border: 3px solid #f8fafc;
+      box-shadow: 0 4px 10px rgba(0,107,68,0.3);
+      cursor: pointer;
+      transition: transform 0.2s;
+
+      &:active {
+        transform: scale(0.9);
+      }
+    }
+  }
+
+  h2 {
+    font-family: serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: $dark;
+    margin: 0 0 5px 0;
+  }
+
+  .role-badge {
+    background: #ecfdf5;
+    color: #059669;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+}
+
+/* --- TARJETAS DE CONFIGURACIÓN --- */
+.settings-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 15px;
+
+    ion-icon {
+      color: $emerald;
+      font-size: 20px;
+    }
+    
+    h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: $dark;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 800;
+      color: $gray;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    input {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 14px 15px;
+      border-radius: 12px;
+      font-size: 15px;
+      color: $dark;
+      outline: none;
+      transition: border 0.3s;
+
+      &:focus {
+        border-color: $emerald;
+        background: white;
+      }
+    }
+
+    small {
+      margin-top: 6px;
+      color: #94a3b8;
+      font-size: 11px;
+    }
+
+    &.disabled-group {
+      input {
+        background: #f1f5f9;
+        color: #94a3b8;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+/* --- BOTÓN GUARDAR --- */
+.btn-save {
+  width: 100%;
+  background: $emerald;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  box-shadow: 0 10px 20px rgba(0,107,68,0.2);
+  transition: 0.2s;
+
+  ion-icon {
+    font-size: 20px;
+  }
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    background: #cbd5e1;
+    box-shadow: none;
+    pointer-events: none;
+  }
+}
+
+.skeleton-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .avatar-skeleton {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+  }
+}

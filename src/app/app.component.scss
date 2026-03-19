@@ -1,0 +1,56 @@
+.dark-menu-content {
+  --background: #1e1e1e; /* Fondo oscuro de tu captura */
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-header {
+  padding: 30px 20px 20px;
+  background: #f4f5f8; /* El gris clarito de arriba en tu captura */
+  h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 400;
+    color: #000;
+  }
+}
+
+.menu-list {
+  background: transparent;
+  padding-top: 10px;
+
+  ion-item {
+    --background: transparent;
+    --color: #ffffff;
+    font-size: 16px;
+    margin-bottom: 5px;
+
+    ion-icon {
+      color: #888; /* Iconos grises */
+      font-size: 22px;
+      margin-right: 20px;
+    }
+
+    &:active {
+      --background: rgba(255, 255, 255, 0.05);
+    }
+  }
+}
+
+.menu-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #252525;
+  border-top: 1px solid #333;
+
+  .logout-item {
+    --background: transparent;
+    --color: #ef4444; /* Rojo para el texto */
+    
+    ion-icon {
+      color: #ef4444; /* Rojo para el icono */
+      margin-right: 20px;
+    }
+  }
+}
